@@ -1,8 +1,10 @@
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+include_directories(cpu)
+include_directories(memory)
+include_directories(sound)
 
-add_library(gameboy CpuCore.cpp CpuCore.hpp)
-
+add_subdirectory(cpu)
+add_subdirectory(memory)
 add_subdirectory(sound)
 
 add_executable(gbcpp main.cpp)
-target_link_libraries(gbcpp glfw gameboy)
+target_link_libraries(gbcpp glfw)

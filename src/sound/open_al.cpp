@@ -1,4 +1,4 @@
-#include "OpenAL.hpp"
+#include "open_al.hpp"
 
 #include <iostream>
 

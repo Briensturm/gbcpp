@@ -1,4 +1,4 @@
-#include "CpuCore.hpp"
+#include "cpu_core.hpp"
 
 CpuCore::CpuCore(RamPtr mainMemory, CpuStatePtr cpuState)
 {

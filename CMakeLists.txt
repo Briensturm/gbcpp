@@ -25,8 +25,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(openal_soft)
 
 #add source
+include_directories(src)
 add_subdirectory(src)
 
 #add tests
-include_directories(src)
 add_subdirectory(test)

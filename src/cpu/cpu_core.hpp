@@ -2,10 +2,10 @@
 
 #include <memory>
 
-#include "IInstruction.hpp"
-#include "InstructionDecoder.hpp"
-#include "CpuState.hpp"
-#include "RandomAccessMemory.hpp"
+#include "instructions/instruction.hpp"
+#include "instructions/instruction_decoder.hpp"
+#include "cpu_state.hpp"
+#include "ram.hpp"
 
 class CpuCore
 {

@@ -4,7 +4,8 @@
 
 class RandomAccessMemory
 {
-
+    public:
+        void DoStuff();
 };
 
 using RamPtr = std::shared_ptr<RandomAccessMemory>;

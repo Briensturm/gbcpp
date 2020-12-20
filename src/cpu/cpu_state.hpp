@@ -2,18 +2,19 @@
 
 #include <memory>
 
-#include "CpuRegisters.hpp"
+#include "cpu_registers.hpp"
+#include "types.hpp"
 
 class CpuState
 {
     public:
-        CpuState(std::shared_ptr<CpuRegisters> cpuRegisters)
-                                 : Registers(cpuRegisters) {}
+        CpuState(RegistersPtr cpuRegisters)
+                    : Registers(cpuRegisters) {}
 
         void Reset();
 
-        unsigned short ProgramCounter;
-        unsigned short StackPointer;
+        ushort ProgramCounter;
+        ushort StackPointer;
 
         bool InterruptMasterEnable;
         bool ImeScheduled;
@@ -22,7 +23,7 @@ class CpuState
         bool StopMode;
         bool InstructionPrefix;
 
-        std::shared_ptr<CpuRegisters> Registers;
+        RegistersPtr Registers;
 };
 
 using CpuStatePtr = std::shared_ptr<CpuState>;

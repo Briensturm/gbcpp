@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "CpuState.hpp"
-#include "RandomAccessMemory.hpp"
+#include "cpu_state.hpp"
+#include "ram.hpp"
 
 class IInstruction
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IInstruction.hpp"
+#include "instruction.hpp"
 
 class CALL : IInstruction
 {
