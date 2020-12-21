@@ -18,6 +18,7 @@ glfw
 openal
 bin
 .vscode
+.vs
 **/*.sln
 **/*.lib
 **/*.pdb

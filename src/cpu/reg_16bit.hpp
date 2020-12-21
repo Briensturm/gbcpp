@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#include "types.hpp"
+#include "gbcpp.hpp"
 
 class Reg16Bit
 {

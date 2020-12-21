@@ -1,15 +1,19 @@
 #pragma once
 
 #include <memory>
+#include <stdexcept>
 
+#include "gbcpp.hpp"
 #include "cpu_registers.hpp"
-#include "types.hpp"
 
 class CpuState
 {
     public:
-        CpuState(RegistersPtr cpuRegisters)
-                    : Registers(cpuRegisters) {}
+        CpuState(RegistersPtr cpuRegisters) : Registers(cpuRegisters) 
+        {
+            if(cpuRegisters == nullptr)
+                throw std::invalid_argument("CpuRegisters must not be null.");
+        }
 
         void Reset();
 

@@ -29,4 +29,5 @@ include_directories(src)
 add_subdirectory(src)
 
 #add tests
+include_directories(test)
 add_subdirectory(test)

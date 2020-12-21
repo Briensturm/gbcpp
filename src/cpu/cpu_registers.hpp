@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "gbcpp.hpp"
 #include "reg_16bit.hpp"
 
 struct CpuRegisters
@@ -10,7 +11,7 @@ struct CpuRegisters
         unsigned short ReadRegister(int index);
         void WriteRegister(int index, unsigned short value);
 
-        void Reset();       
+        mockable void Reset();
 
         Reg8Bit A = Reg8Bit(_a);
         Reg8Bit B = Reg8Bit(_b);

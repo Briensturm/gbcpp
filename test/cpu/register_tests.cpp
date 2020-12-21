@@ -1,9 +1,9 @@
-#include "Test.hpp"
+#include "test.hpp"
 
 #include "cpu/reg_16bit.hpp"
 #include "cpu/cpu_registers.hpp"
 
-TEST_FIXTURE_BEGIN("RegisterTests")
+TEST_FIXTURE_BEGIN("CpuRegisters_Tests")
 {
     TEST("Assigning_to_Reg16Bit_assigns_high_and_low_nibble")
     {
@@ -104,14 +104,14 @@ TEST_FIXTURE_BEGIN("RegisterTests")
     {
         auto registers = CpuRegisters();
 
-        ASSERT_THROWS(std::out_of_range, registers.ReadRegister(8));
+        ASSERT_THROWS<std::out_of_range>([&registers](){ registers.ReadRegister(8); });
     }
 
     TEST("Writing_at_out_of_range_index_throws_out_of_range_exception")
     {
         auto registers = CpuRegisters();
 
-        ASSERT_THROWS(std::out_of_range, registers.WriteRegister(8, 0x00));
+        ASSERT_THROWS<std::out_of_range>([&registers](){ registers.WriteRegister(8, 0x00); });
     }
 
     TEST("Resetting_CpuRegisters_sets_carry_flag")
