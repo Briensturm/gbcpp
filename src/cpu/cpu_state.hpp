@@ -15,7 +15,7 @@ class CpuState
                 throw std::invalid_argument("CpuRegisters must not be null.");
         }
 
-        void Reset();
+        mockable void Reset();
 
         ushort ProgramCounter;
         ushort StackPointer;

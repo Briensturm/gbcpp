@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory>
-
 #include "mock.hpp"
 #include "cpu/cpu_registers.hpp"
 

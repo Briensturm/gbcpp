@@ -8,7 +8,7 @@
 struct CpuRegisters
 {
     public:
-        unsigned short ReadRegister(int index);
+        unsigned short ReadRegister(int index) const;
         void WriteRegister(int index, unsigned short value);
 
         mockable void Reset();

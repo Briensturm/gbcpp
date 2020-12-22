@@ -2,20 +2,23 @@
 
 #include <memory>
 
-#include "cpu_state.hpp"
-#include "ram.hpp"
+#include "gbcpp.hpp"
+#include "cpu/cpu_state.hpp"
+#include "ram/ram.hpp"
 
-class IInstruction
+class Instruction
 {
     public:
         virtual void ExecuteCycle(CpuStatePtr& cpuState, RamPtr& mainMemory);
-        bool IsFetchNecessary();
-        void Initialize(uint8_t opcode);
+        mockable bool IsFetchNecessary();
+        mockable void Initialize(byte opcode);
 
     protected:
         int _remainingCycles;
-        uint8_t _opcode;
+        byte _opcode;
 
         virtual int GetInstructionLength() = 0;
         bool IsConditionMet(const CpuStatePtr& cpuState);     
 };
+
+using InstrPtr = std::shared_ptr<Instruction>;
