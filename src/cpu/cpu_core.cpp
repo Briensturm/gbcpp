@@ -1,106 +1,85 @@
 #include "cpu_core.hpp"
 
-CpuCore::CpuCore(RamPtr mainMemory, CpuStatePtr cpuState)
-{
-    /*_mainMemory = mainMemory;
-    _cpuState = cpuState;
-
-    _instructionDecoder = new InstructionDecoder();
-
-    _logger = logger;
-
-    Reset();*/
-}
-
-
-        /*private IInstruction CurrentInstruction
-        {
-            get
-            {
-                if (_currentInstruction == null)
-                    _currentInstruction = GetNextInstruction();
-
-                return _currentInstruction;
-            }
-
-            set => _currentInstruction = value;
-        }*/
+using namespace constants;
 
 void CpuCore::AdvanceMachineCycle()
-{   
-    /*     
+{     
     //execute one cycle of the instruction, if not in halt/stop
-    if(IsCpuRunning)
-        CurrentInstruction.ExecuteCycle(_cpuState, _mainMemory);            
+    if(IsCpuRunning())
+        GetCurrentInstruction()->ExecuteCycle(_cpuState, _ram);            
 
-    if (CurrentInstruction.IsFetchNecessary())
+    if (GetCurrentInstruction()->IsFetchNecessary())
     {
         //check for interrupts
-        var readyInterrupts = GetRequestedAndEnabledInterrupts();
-        if(readyInterrupts != 0 && !_cpuState.InstructionPrefix)
+        auto readyInterrupts = GetRequestedAndEnabledInterrupts();
+        if(readyInterrupts != 0 && !_cpuState->InstructionPrefix)
         {
-            _cpuState.HaltMode = false;
-            _cpuState.StopMode = false;
+            _cpuState->HaltMode = false;
+            _cpuState->StopMode = false;
 
-            if (_cpuState.InterruptMasterEnable)
-                CurrentInstruction = _instructionDecoder.GetInterruptServiceRoutineInstruction(readyInterrupts);
+            if (_cpuState->InterruptMasterEnable)
+                _currentInstruction = _instrDecoder->GetInterruptServiceRoutineInstruction(readyInterrupts);
             else
-                CurrentInstruction = GetNextInstruction();
+                _currentInstruction = GetNextInstruction();
         }
 
-        else if (IsCpuRunning)
-            CurrentInstruction = GetNextInstruction();
+        else if (IsCpuRunning())
+            _currentInstruction = GetNextInstruction();
     }                
 
     //delayed EI handling
-    if(_cpuState.ImeScheduled)
+    if(_cpuState->ImeScheduled)
     {
-        _cpuState.ImeScheduled = false;
-        _cpuState.InterruptMasterEnable = true;
-    }*/
+        _cpuState->ImeScheduled = false;
+        _cpuState->InterruptMasterEnable = true;
+    }
 }
 
 void CpuCore::Reset()
 {
-    /*_cpuState.Reset();
-    CurrentInstruction = null;*/
+    _cpuState->Reset();
+    _currentInstruction = nullptr;
 }
 
-std::shared_ptr<IInstruction> CpuCore::GetNextInstruction()
+InstrPtr CpuCore::GetNextInstruction()
 {
-    /*auto nextOpcode = _mainMemory.ReadByte(_cpuState.ProgramCounter++);            
+    auto nextOpcode = _ram->ReadByte(_cpuState->ProgramCounter++);            
 
-    if (_cpuState.InstructionPrefix)
+    if (_cpuState->InstructionPrefix)
     {
-        _cpuState.InstructionPrefix = false;
-        return _instructionDecoder.DecodeInstruction(nextOpcode, true);
+        _cpuState->InstructionPrefix = false;
+        return _instrDecoder->DecodePrefixedInstruction(nextOpcode);
     }
 
-    if (_cpuState.HaltBug)
+    if (_cpuState->HaltBug)
     {
-        _cpuState.ProgramCounter--;
-        _cpuState.HaltBug = false;
+        _cpuState->ProgramCounter--;
+        _cpuState->HaltBug = false;
     }
 
-    return _instructionDecoder.DecodeInstruction(nextOpcode);    */
-
-    return nullptr;
+    return _instrDecoder->DecodeInstruction(nextOpcode);
 }
 
-uint8_t CpuCore::GetRequestedAndEnabledInterrupts()
+byte CpuCore::GetRequestedAndEnabledInterrupts() const
 {
-    /*auto interruptFlags = _mainMemory.ReadByte(MiscRegisters.InterruptFlags) & 0x1F;
+    auto interruptFlags = _ram->ReadByte(reg::int_flags) & 0x1F;
     if (interruptFlags == 0)
         return 0;
 
-    auto interruptEnable = _mainMemory.ReadByte(MiscRegisters.InterruptEnable);            
+    auto interruptEnable = _ram->ReadByte(reg::int_enable);            
 
-    return (uint8_t)(interruptEnable & interruptFlags);*/
-
-    return 0;
+    return (byte)(interruptEnable & interruptFlags);
 }
 
-bool CpuCore::IsCpuRunning()
+bool CpuCore::IsCpuRunning() const
 {
     return !_cpuState->StopMode && !_cpuState->HaltMode;
+}
+
+InstrPtr CpuCore::GetCurrentInstruction()
+{
+    if (_currentInstruction == nullptr)
+        _currentInstruction = GetNextInstruction();
+
+    return _currentInstruction;
 }

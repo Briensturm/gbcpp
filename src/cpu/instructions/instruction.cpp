@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-void IInstruction::ExecuteCycle(CpuStatePtr& cpuState, RamPtr& mainMemory)
+void Instruction::ExecuteCycle(CpuStatePtr& cpuState, RamPtr& mainMemory)
 {
     if (cpuState == nullptr)
         throw std::invalid_argument("cpuState must not be nullptr.");
@@ -16,18 +16,18 @@ void IInstruction::ExecuteCycle(CpuStatePtr& cpuState, RamPtr& mainMemory)
     _remainingCycles--;
 }
 
-bool IInstruction::IsFetchNecessary()
+bool Instruction::IsFetchNecessary()
 {
     return _remainingCycles == 0;
 }
 
-void IInstruction::Initialize(uint8_t opcode = 0x00)
+void Instruction::Initialize(uint8_t opcode = 0x00)
 {
     _remainingCycles = GetInstructionLength();
     _opcode = opcode;
 }
 
-bool IInstruction::IsConditionMet(const CpuStatePtr& cpuState)
+bool Instruction::IsConditionMet(const CpuStatePtr& cpuState)
 {
     auto condition = _opcode & 0x18;
     auto registers = *cpuState->Registers;

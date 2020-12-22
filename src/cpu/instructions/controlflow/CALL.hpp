@@ -2,7 +2,7 @@
 
 #include "instruction.hpp"
 
-class CALL : IInstruction
+class CALL : public Instruction
 {
     public:
 

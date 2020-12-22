@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-unsigned short CpuRegisters::ReadRegister(int index)
+unsigned short CpuRegisters::ReadRegister(int index) const
 {
     switch(index)
     {
