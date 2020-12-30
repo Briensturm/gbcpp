@@ -1,31 +1,28 @@
-#pragma once
+﻿#pragma once
 
 #include "instruction.hpp"
 
-class CALL : public Instruction
+class JPCC : public Instruction
 {
     public:
-        int GetInstructionLength() { return 6; }
+        int GetInstructionLength() { return 4; }
 
         void ExecuteCycle(CpuStatePtr& cpuState, RamPtr& mainMemory)
         {
             switch(_remainingCycles)
             {
-                case 6:
+                case 4:
                     //read jump address lsb
                     _jumpAddress = mainMemory->ReadByte(cpuState->ProgramCounter++);
                     break;
-                case 5:
+                case 3:
                     //read jump address msb
                     _jumpAddress |= (ushort)(mainMemory->ReadByte(cpuState->ProgramCounter++) << 8);
                     break;
-                case 3:
-                    //write msb of program counter to stack
-                    mainMemory->WriteByte(--cpuState->StackPointer, (byte)(cpuState->ProgramCounter >> 8));
-                    break;
                 case 2:
-                    //write lsb of program counter to stack
-                    mainMemory->WriteByte(--cpuState->StackPointer, (byte)(cpuState->ProgramCounter & 0x00FF));
+                    //set last cycle if condition is not met
+                    if (!IsConditionMet(cpuState))
+                        _remainingCycles = 1;
                     break;
                 case 1:
                     //do the jump

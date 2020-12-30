@@ -1,12 +1,22 @@
 #include "instruction_decoder.hpp"
 
-#include "controlflow/call.hpp"
 #include "bit/bitn_hl_.hpp"
 #include "bit/bitnr8.hpp"
 #include "bit/resn_hl_.hpp"
 #include "bit/resnr8.hpp"
 #include "bit/setn_hl_.hpp"
 #include "bit/setnr8.hpp"
+#include "controlflow/call.hpp"
+#include "controlflow/callcc.hpp"
+#include "controlflow/jpcc.hpp"
+#include "controlflow/jpd16.hpp"
+#include "controlflow/jphl.hpp"
+#include "controlflow/jr.hpp"
+#include "controlflow/jrcc.hpp"
+#include "controlflow/ret.hpp"
+#include "controlflow/retcc.hpp"
+#include "controlflow/reti.hpp"
+#include "controlflow/rst.hpp"
 #include "logic/anda_hl_.hpp"
 #include "logic/andad8.hpp"
 #include "logic/andar8.hpp"
@@ -76,6 +86,21 @@ void InstructionDecoder::InstantiateInstructions()
         else if ((opcode & 0xF8) == 0xA8 && opcode != 0xAE)
             _instructions[opcode] = std::make_shared<XORAR8>();
 
+        else if ((opcode & 0xE7) == 0xC4)
+            _instructions[opcode] = std::make_shared<CALLCC>();
+
+        else if ((opcode & 0xE7) == 0xC2)
+            _instructions[opcode] = std::make_shared<JPCC>();
+
+        else if ((opcode & 0xE7) == 0x20)
+            _instructions[opcode] = std::make_shared<JRCC>();
+
+        if ((opcode & 0xE7) == 0xC0)
+            _instructions[opcode] = std::make_shared<RETCC>();
+
+        if ((opcode & 0xC7) == 0xC7)  
+            _instructions[opcode] = std::make_shared<RST>();  
+
         else
         {
             switch(opcode)
@@ -84,6 +109,8 @@ void InstructionDecoder::InstantiateInstructions()
                     _instructions[opcode] = std::make_shared<NOP>();
                 case 0x10:
                     _instructions[opcode] = std::make_shared<STOP>();
+                case 0x18:
+                    _instructions[opcode] = std::make_shared<JR>();
                 case 0x27:
                     _instructions[opcode] = std::make_shared<DAA>();
                 case 0x2F:
@@ -100,12 +127,20 @@ void InstructionDecoder::InstantiateInstructions()
                     _instructions[opcode] = std::make_shared<XORA_HL_>();
                 case 0xB6:
                     _instructions[opcode] = std::make_shared<ORA_HL_>();
+                case 0xC3:
+                    _instructions[opcode] = std::make_shared<JPD16>();
+                case 0xC9:
+                    _instructions[opcode] = std::make_shared<RET>();
                 case 0xCB:
                     _instructions[opcode] = std::make_shared<PREFIX>();
                 case 0xCD:
                     _instructions[opcode] = std::make_shared<CALL>(); 
+                case 0xD9:
+                    _instructions[opcode] = std::make_shared<RETI>();
                 case 0xE6:
                     _instructions[opcode] = std::make_shared<ANDAD8>();
+                case 0xE9:
+                    _instructions[opcode] = std::make_shared<JPHL>();
                 case 0xEE:
                     _instructions[opcode] = std::make_shared<XORAD8>();
                 case 0xF3:
