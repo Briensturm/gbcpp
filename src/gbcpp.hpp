@@ -20,4 +20,13 @@ namespace constants
 
         ushort const joypad = 0xFF00;
     }
+
+    namespace int_addr
+    {
+        const ushort vblank = 0x0040;
+        const ushort lcd    = 0x0048;
+        const ushort timer  = 0x0050;
+        const ushort serial = 0x0058;
+        const ushort joypad = 0x0060;
+    }
 }
