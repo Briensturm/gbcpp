@@ -1,6 +1,12 @@
 #include "instruction_decoder.hpp"
 
 #include "controlflow/call.hpp"
+#include "bit/bitn_hl_.hpp"
+#include "bit/bitnr8.hpp"
+#include "bit/resn_hl_.hpp"
+#include "bit/resnr8.hpp"
+#include "bit/setn_hl_.hpp"
+#include "bit/setnr8.hpp"
 #include "misc/ccf.hpp"
 #include "misc/cpl.hpp"
 #include "misc/daa.hpp"
@@ -84,8 +90,26 @@ void InstructionDecoder::InstantiateInstructions()
     //prefixed instructions
     for(byte opcode = 0x00; opcode < 0xFF; opcode++)
     {
-        if ((opcode & 0xF8) == 0x18 && opcode != 0x1E)
-            _prefixedInstructions[opcode] = std::make_shared<RRR8>();
+        if ((opcode & 0xC0) == 0x40 && (opcode & 0x07) != 0x06)
+            _prefixedInstructions[opcode] = std::make_shared<BITNR8>();
+
+        if ((opcode & 0xC0) == 0xC0 && (opcode & 0x07) != 0x06)
+            _prefixedInstructions[opcode] = std::make_shared<SETNR8>();
+
+        else if ((opcode & 0xC0) == 0x80 && (opcode & 0x07) != 0x06)
+            _prefixedInstructions[opcode] = std::make_shared<RESNR8>();
+
+        else if ((opcode & 0xC0) == 0x40 && (opcode & 0x07) == 0x06)
+            _prefixedInstructions[opcode] = std::make_shared<BITN_HL_>();
+
+        else if ((opcode & 0xC0) == 0x80 && (opcode & 0x07) == 0x06)
+            _prefixedInstructions[opcode] = std::make_shared<RESN_HL_>();
+
+        else if ((opcode & 0xC0) == 0xC0 && (opcode & 0x07) == 0x06)
+            _prefixedInstructions[opcode] = std::make_shared<SETN_HL_>();
+
+        else if ((opcode & 0xF8) == 0x18 && opcode != 0x1E)
+            _prefixedInstructions[opcode] = std::make_shared<RRR8>();            
 
         else
         {

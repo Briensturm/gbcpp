@@ -14,6 +14,12 @@ add_library(cpu
     instructions/instruction.hpp
     
     instructions/controlflow/call.hpp
+    instructions/bit/bitn_hl_.hpp
+    instructions/bit/bitnr8.hpp
+    instructions/bit/resn_hl_.hpp
+    instructions/bit/resnr8.hpp
+    instructions/bit/setn_hl_.hpp
+    instructions/bit/setnr8.hpp
     instructions/misc/ccf.hpp
     instructions/misc/cpl.hpp
     instructions/misc/daa.hpp
