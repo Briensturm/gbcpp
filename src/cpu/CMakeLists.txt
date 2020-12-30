@@ -20,6 +20,15 @@ add_library(cpu
     instructions/bit/resnr8.hpp
     instructions/bit/setn_hl_.hpp
     instructions/bit/setnr8.hpp
+    instructions/logic/anda_hl_.hpp
+    instructions/logic/andad8.hpp
+    instructions/logic/andar8.hpp
+    instructions/logic/ora_hl_.hpp
+    instructions/logic/orad8.hpp
+    instructions/logic/orar8.hpp
+    instructions/logic/xora_hl_.hpp
+    instructions/logic/xorad8.hpp
+    instructions/logic/xorar8.hpp
     instructions/misc/ccf.hpp
     instructions/misc/cpl.hpp
     instructions/misc/daa.hpp

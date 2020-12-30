@@ -7,6 +7,15 @@
 #include "bit/resnr8.hpp"
 #include "bit/setn_hl_.hpp"
 #include "bit/setnr8.hpp"
+#include "logic/anda_hl_.hpp"
+#include "logic/andad8.hpp"
+#include "logic/andar8.hpp"
+#include "logic/ora_hl_.hpp"
+#include "logic/orad8.hpp"
+#include "logic/orar8.hpp"
+#include "logic/xora_hl_.hpp"
+#include "logic/xorad8.hpp"
+#include "logic/xorar8.hpp"
 #include "misc/ccf.hpp"
 #include "misc/cpl.hpp"
 #include "misc/daa.hpp"
@@ -54,8 +63,18 @@ void InstructionDecoder::InstantiateInstructions()
     {
         if ((opcode & 0xCF) == 0xC1)
             _instructions[opcode] = std::make_shared<POP>();
+
         else if ((opcode & 0xCF) == 0xC5)
             _instructions[opcode] = std::make_shared<PUSH>();
+
+        else if ((opcode & 0xF8) == 0xA0 && opcode != 0xA6)
+            _instructions[opcode] = std::make_shared<ANDAR8>();
+
+        else if ((opcode & 0xF8) == 0xB0 && opcode != 0xB6)
+            _instructions[opcode] = std::make_shared<ORAR8>();
+
+        else if ((opcode & 0xF8) == 0xA8 && opcode != 0xAE)
+            _instructions[opcode] = std::make_shared<XORAR8>();
 
         else
         {
@@ -71,16 +90,28 @@ void InstructionDecoder::InstantiateInstructions()
                     _instructions[opcode] = std::make_shared<CPL>();
                 case 0x37:
                     _instructions[opcode] = std::make_shared<SCF>();
+                case 0x3F:
+                    _instructions[opcode] = std::make_shared<CCF>();
                 case 0x76:
                     _instructions[opcode] = std::make_shared<HALT>();
+                case 0xA6:
+                    _instructions[opcode] = std::make_shared<ANDA_HL_>();
+                case 0xAE:
+                    _instructions[opcode] = std::make_shared<XORA_HL_>();
+                case 0xB6:
+                    _instructions[opcode] = std::make_shared<ORA_HL_>();
                 case 0xCB:
                     _instructions[opcode] = std::make_shared<PREFIX>();
                 case 0xCD:
-                    _instructions[opcode] = std::make_shared<CALL>();
-                case 0x3F:
-                    _instructions[opcode] = std::make_shared<CCF>();
+                    _instructions[opcode] = std::make_shared<CALL>(); 
+                case 0xE6:
+                    _instructions[opcode] = std::make_shared<ANDAD8>();
+                case 0xEE:
+                    _instructions[opcode] = std::make_shared<XORAD8>();
                 case 0xF3:
                     _instructions[opcode] = std::make_shared<DI>();
+                case 0xF6:
+                    _instructions[opcode] = std::make_shared<ORAD8>();
                 case 0xFB:
                     _instructions[opcode] = std::make_shared<EI>();
             }        
