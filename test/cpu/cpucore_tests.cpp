@@ -6,19 +6,24 @@
 
 #include "cpu/cpu_core.hpp"
 
-CpuCorePtr CreateCpuCore(std::shared_ptr<CpuState>& outCpuState)
+CpuCorePtr CreateCpuCore(CpuStatePtr& outCpuState, InstrPtr& outInstr, InstrDecPtr& outInstrdec, RamPtr& outRam)
 {
     outCpuState = std::make_shared<CpuState>(CpuState(MOCK_OF<CpuRegistersMock, CpuRegisters>()));
 
     auto ramMock = CREATE_MOCK<RamMock>();
     ramMock->byte_ReadByte_ushort_SetReturnValue(0x0100, 0x00);
+    ramMock->byte_ReadByte_ushort_SetReturnValue(0x0101, 0x00);
+    ramMock->byte_ReadByte_ushort_SetReturnValue(constants::reg::int_flags, 0x00);
+    outRam = GET_OBJECT<RandomAccessMemory>(ramMock);
 
     auto instrMock = CREATE_MOCK<InstrMock>();
-    instrMock->int_GetInstructionLength_SetReturnValue(2);
+    instrMock->int_GetInstructionLength_SetReturnValue(1);
     instrMock->Initialize(0x00);
+    outInstr = GET_OBJECT<Instruction>(instrMock);
 
     auto instrdecMock = CREATE_MOCK<InstrDecMock>();
-    instrdecMock->InstrPtr_DecodeInstruction_byte_SetReturnValue(0x00, GET_OBJECT<Instruction>(instrMock));        
+    instrdecMock->InstrPtr_DecodeInstruction_byte_SetReturnValue(0x00, GET_OBJECT<Instruction>(instrMock)); 
+    outInstrdec = GET_OBJECT<InstructionDecoder>(instrdecMock);    
     
     auto cpuCore =  std::make_shared<CpuCore>(GET_OBJECT<RandomAccessMemory>(ramMock), 
                                               outCpuState,
@@ -26,6 +31,39 @@ CpuCorePtr CreateCpuCore(std::shared_ptr<CpuState>& outCpuState)
 
     cpuCore->Reset();
     return cpuCore;
+}
+
+CpuCorePtr CreateCpuCore(CpuStatePtr& outCpuState, RamPtr& outRam)
+{
+    InstrPtr instr;
+    InstrDecPtr instrDec;
+    return CreateCpuCore(outCpuState, instr, instrDec, outRam);
+}
+
+CpuCorePtr CreateCpuCore(CpuStatePtr& outCpuState, InstrDecPtr& outInstrdec)
+{
+    InstrPtr instr;
+    RamPtr ram;
+    return CreateCpuCore(outCpuState, instr, outInstrdec, ram);
+}
+
+CpuCorePtr CreateCpuCore(CpuStatePtr& outCpuState, InstrPtr& outInstr)
+{
+    InstrDecPtr instrDec;
+    RamPtr ram;
+    return CreateCpuCore(outCpuState, outInstr, instrDec, ram);
+}
+
+CpuCorePtr CreateCpuCore(CpuStatePtr& outCpuState)
+{
+    InstrPtr instr;
+    return CreateCpuCore(outCpuState, instr);
+}
+
+CpuCorePtr CreateCpuCore()
+{
+    CpuStatePtr cpuState;
+    return CreateCpuCore(cpuState);
 }
 
 TEST_FIXTURE_BEGIN("CpuCore_Tests")
@@ -84,6 +122,58 @@ TEST_FIXTURE_BEGIN("CpuCore_Tests")
 
         ASSERT_TRUE(cpuState->InterruptMasterEnable);
         ASSERT_FALSE(cpuState->ImeScheduled);
+    }
+
+    TEST("AdvanceMachineCycle_executes_cycle_of_instruction_if_not_in_halt_or_stop")
+    {
+        CpuStatePtr cpuState;
+        InstrPtr instr;
+        auto cpuCore = CreateCpuCore(cpuState, instr);
+
+        cpuCore->Reset();
+        cpuCore->AdvanceMachineCycle();
+
+        ASSERT_EQUAL(1, GET_MOCK<InstrMock>(instr)->ExecuteCycleCalled);
+    }
+
+    TEST("AdvanceMachineCycle_does_not_execute_cycle_of_instruction_if_in_halt")
+    {
+        CpuStatePtr cpuState;
+        InstrPtr instr;
+        auto cpuCore = CreateCpuCore(cpuState, instr);
+
+        cpuCore->Reset();
+        cpuState->HaltMode = true;
+
+        cpuCore->AdvanceMachineCycle();
+
+        ASSERT_EQUAL(0, GET_MOCK<InstrMock>(instr)->ExecuteCycleCalled);
+    }
+
+    TEST("AdvanceMachineCycle_does_not_execute_cycle_of_instruction_if_in_stop")
+    {
+        CpuStatePtr cpuState;
+        InstrPtr instr;
+        auto cpuCore = CreateCpuCore(cpuState, instr);
+
+        cpuCore->Reset();
+        cpuState->StopMode = true;
+        
+        cpuCore->AdvanceMachineCycle();
+
+        ASSERT_EQUAL(0, GET_MOCK<InstrMock>(instr)->ExecuteCycleCalled);
+    }
+
+    TEST("AdvanceMachineCycle_fetches_next_instruction_once_all_cycles_of_current_instr_are_done")
+    {
+        CpuStatePtr cpuState;
+        InstrDecPtr instrDec;
+        auto cpuCore = CreateCpuCore(cpuState, instrDec);
+
+        cpuCore->Reset();        
+        cpuCore->AdvanceMachineCycle();
+
+        VERIFY_RET_P(GET_MOCK<InstrDecMock>(instrDec), InstrPtr, DecodeInstruction, byte, 0x00, TIMES(2));
     }
 }
 TEST_FIXTURE_END

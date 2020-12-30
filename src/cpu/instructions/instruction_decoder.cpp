@@ -1,13 +1,39 @@
 #include "instruction_decoder.hpp"
 
+#include "controlflow/call.hpp"
+#include "misc/ccf.hpp"
+#include "misc/cpl.hpp"
+#include "misc/daa.hpp"
+#include "misc/di.hpp"
+#include "misc/ei.hpp"
+#include "misc/halt.hpp"
+#include "misc/nop.hpp"
+#include "misc/pop.hpp"
+#include "misc/prefix.hpp"
+#include "misc/push.hpp"
+#include "misc/scf.hpp"
+#include "misc/stop.hpp"
+#include "rotateshift/rrr8.hpp"
+
+InstructionDecoder::InstructionDecoder()
+{
+    InstantiateInstructions();
+}
+
 InstrPtr InstructionDecoder::DecodeInstruction(byte opcode)
 {
-    throw "Not implemented";
+    auto instruction = _instructions[opcode];
+    instruction->Initialize(opcode);
+
+    return instruction;
 }
 
 InstrPtr InstructionDecoder::DecodePrefixedInstruction(byte opcode)
 {
-    throw "Not implemented";
+    auto instruction = _prefixedInstructions[opcode];
+    instruction->Initialize(opcode);
+
+    return instruction;
 }
 
 InstrPtr InstructionDecoder::GetInterruptServiceRoutineInstruction(byte readyInterrupts)
@@ -17,5 +43,58 @@ InstrPtr InstructionDecoder::GetInterruptServiceRoutineInstruction(byte readyInt
         
 void InstructionDecoder::InstantiateInstructions()
 {
-    throw "Not implemented";
+    //unprefixed instructions
+    for(byte opcode = 0x00; opcode < 0xFF; opcode++)
+    {
+        if ((opcode & 0xCF) == 0xC1)
+            _instructions[opcode] = std::make_shared<POP>();
+        else if ((opcode & 0xCF) == 0xC5)
+            _instructions[opcode] = std::make_shared<PUSH>();
+
+        else
+        {
+            switch(opcode)
+            {
+                case 0x00:
+                    _instructions[opcode] = std::make_shared<NOP>();
+                case 0x10:
+                    _instructions[opcode] = std::make_shared<STOP>();
+                case 0x27:
+                    _instructions[opcode] = std::make_shared<DAA>();
+                case 0x2F:
+                    _instructions[opcode] = std::make_shared<CPL>();
+                case 0x37:
+                    _instructions[opcode] = std::make_shared<SCF>();
+                case 0x76:
+                    _instructions[opcode] = std::make_shared<HALT>();
+                case 0xCB:
+                    _instructions[opcode] = std::make_shared<PREFIX>();
+                case 0xCD:
+                    _instructions[opcode] = std::make_shared<CALL>();
+                case 0x3F:
+                    _instructions[opcode] = std::make_shared<CCF>();
+                case 0xF3:
+                    _instructions[opcode] = std::make_shared<DI>();
+                case 0xFB:
+                    _instructions[opcode] = std::make_shared<EI>();
+            }        
+        }       
+    }
+
+    //prefixed instructions
+    for(byte opcode = 0x00; opcode < 0xFF; opcode++)
+    {
+        if ((opcode & 0xF8) == 0x18 && opcode != 0x1E)
+            _prefixedInstructions[opcode] = std::make_shared<RRR8>();
+
+        else
+        {
+            switch(opcode)
+            {
+                case 0xCD:
+                    //_prefixedInstructions[opcode] = std::make_shared<CALL>();
+                    break;
+            }   
+        }            
+    }
 }

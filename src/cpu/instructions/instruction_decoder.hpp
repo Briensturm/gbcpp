@@ -9,6 +9,7 @@
 class InstructionDecoder
 {
     public:
+        InstructionDecoder();
         mockable InstrPtr DecodeInstruction(byte opcode);
         InstrPtr DecodePrefixedInstruction(byte opcode);
         InstrPtr GetInterruptServiceRoutineInstruction(byte readyInterrupts);
@@ -16,8 +17,8 @@ class InstructionDecoder
     private:
         void InstantiateInstructions();
 
-        std::array<InstrPtr, 0xFF> _Instructions;
-        std::array<InstrPtr, 0xFF> _prefixedInstructions;
+        std::array<InstrPtr, 0xFF> _instructions;
+        std::array<InstrPtr, 0xFF> _prefixedInstructions;        
 };
 
 using InstrDecPtr = std::shared_ptr<InstructionDecoder>;
