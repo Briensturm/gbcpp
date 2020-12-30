@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include "instruction.hpp"
 
-class CALL : public Instruction
+class CALLCC : public Instruction
 {
     public:
         int GetInstructionLength() { return 6; }
@@ -18,6 +18,11 @@ class CALL : public Instruction
                 case 5:
                     //read jump address msb
                     _jumpAddress |= (ushort)(mainMemory->ReadByte(cpuState->ProgramCounter++) << 8);
+                    break;
+                case 4:
+                    //set last cycle if condition is not met
+                    if (!IsConditionMet(cpuState))
+                        _remainingCycles = 1;
                     break;
                 case 3:
                     //write msb of program counter to stack

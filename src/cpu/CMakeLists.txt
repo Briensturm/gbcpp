@@ -13,13 +13,23 @@ add_library(cpu
     instructions/instruction.cpp
     instructions/instruction.hpp
     
-    instructions/controlflow/call.hpp
     instructions/bit/bitn_hl_.hpp
     instructions/bit/bitnr8.hpp
     instructions/bit/resn_hl_.hpp
     instructions/bit/resnr8.hpp
     instructions/bit/setn_hl_.hpp
     instructions/bit/setnr8.hpp
+    instructions/controlflow/call.hpp
+    instructions/controlflow/callcc.hpp
+    instructions/controlflow/jpcc.hpp
+    instructions/controlflow/jpd16.hpp
+    instructions/controlflow/jphl.hpp
+    instructions/controlflow/jr.hpp
+    instructions/controlflow/jrcc.hpp
+    instructions/controlflow/ret.hpp
+    instructions/controlflow/retcc.hpp
+    instructions/controlflow/reti.hpp
+    instructions/controlflow/rst.hpp
     instructions/logic/anda_hl_.hpp
     instructions/logic/andad8.hpp
     instructions/logic/andar8.hpp

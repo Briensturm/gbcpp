@@ -4,6 +4,7 @@
 
 using ushort = unsigned short;
 using byte = uint8_t;
+using sbyte = int8_t;
 
 #define mockable virtual
 
