@@ -21,7 +21,7 @@ bool Instruction::IsFetchNecessary()
     return _remainingCycles == 0;
 }
 
-void Instruction::Initialize(uint8_t opcode = 0x00)
+void Instruction::Initialize(byte opcode)
 {
     _remainingCycles = GetInstructionLength();
     _opcode = opcode;

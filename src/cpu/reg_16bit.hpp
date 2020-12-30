@@ -15,6 +15,22 @@ class Reg16Bit
             _highNibble = value >> 8;
             _lowNibble = (byte)value;
         }
+        virtual Reg16Bit& operator+=(const ushort rhs)
+        {
+            auto newValue = (_highNibble << 8 | _lowNibble) + rhs;
+            _highNibble = (byte)(newValue >> 8);
+            _lowNibble = (byte)newValue;
+
+            return *this;
+        }
+        virtual Reg16Bit& operator-=(const ushort rhs)
+        {
+            auto newValue = (_highNibble << 8 | _lowNibble) - rhs;
+            _highNibble = (byte)(newValue >> 8);
+            _lowNibble = (byte)newValue;
+
+            return *this;
+        }
         virtual operator ushort () const 
         { 
             return (ushort)(_highNibble << 8 | _lowNibble); 
@@ -33,6 +49,16 @@ class Reg8Bit : public Reg16Bit
         void operator = (const ushort &value) 
         { 
             _lowNibble = (byte)value;
+        }
+        Reg8Bit& operator+=(const ushort rhs)
+        {
+            _lowNibble += rhs;
+            return *this;
+        }
+        Reg8Bit& operator-=(const ushort rhs)
+        {
+            _lowNibble -= rhs;
+            return *this;
         }
         operator ushort () const  
         { 

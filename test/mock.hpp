@@ -12,6 +12,12 @@ std::shared_ptr<realType> GET_OBJECT(std::shared_ptr<mockType> mockPtr)
     return std::static_pointer_cast<realType>(mockPtr);
 }
 
+template<typename mockType, typename realType>
+std::shared_ptr<mockType> GET_MOCK(std::shared_ptr<realType> realPtr)
+{
+    return std::static_pointer_cast<mockType>(realPtr);
+}
+
 template<typename mockType>
 std::shared_ptr<mockType> CREATE_MOCK()
 {
