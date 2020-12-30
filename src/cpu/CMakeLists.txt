@@ -13,6 +13,29 @@ add_library(cpu
     instructions/instruction.cpp
     instructions/instruction.hpp
     
+    instructions/arithmetic/adca_hl_.hpp
+    instructions/arithmetic/adcad8.hpp
+    instructions/arithmetic/adcar8.hpp
+    instructions/arithmetic/adda_hl_.hpp
+    instructions/arithmetic/addad8.hpp
+    instructions/arithmetic/addar8.hpp
+    instructions/arithmetic/addhlr16.hpp
+    instructions/arithmetic/addsps8.hpp
+    instructions/arithmetic/cpa_hl_.hpp
+    instructions/arithmetic/cpad8.hpp
+    instructions/arithmetic/cpar8.hpp
+    instructions/arithmetic/dec_hl_.hpp
+    instructions/arithmetic/decr8.hpp
+    instructions/arithmetic/decr16.hpp
+    instructions/arithmetic/inc_hl_.hpp
+    instructions/arithmetic/incr8.hpp
+    instructions/arithmetic/incr16.hpp
+    instructions/arithmetic/sbca_hl_.hpp
+    instructions/arithmetic/sbcad8.hpp
+    instructions/arithmetic/sbcar8.hpp
+    instructions/arithmetic/suba_hl_.hpp
+    instructions/arithmetic/subad8.hpp
+    instructions/arithmetic/subar8.hpp
     instructions/bit/bitn_hl_.hpp
     instructions/bit/bitnr8.hpp
     instructions/bit/resn_hl_.hpp
@@ -30,6 +53,7 @@ add_library(cpu
     instructions/controlflow/retcc.hpp
     instructions/controlflow/reti.hpp
     instructions/controlflow/rst.hpp
+    instructions/internal/ldisr.hpp
     instructions/logic/anda_hl_.hpp
     instructions/logic/andad8.hpp
     instructions/logic/andar8.hpp

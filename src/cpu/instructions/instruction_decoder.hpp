@@ -4,7 +4,8 @@
 #include <array>
 
 #include "gbcpp.hpp"
-#include "cpu/instructions/instruction.hpp"
+#include "instruction.hpp"
+#include "internal/ldisr.hpp"
 
 class InstructionDecoder
 {
@@ -18,7 +19,9 @@ class InstructionDecoder
         void InstantiateInstructions();
 
         std::array<InstrPtr, 0xFF> _instructions;
-        std::array<InstrPtr, 0xFF> _prefixedInstructions;        
+        std::array<InstrPtr, 0xFF> _prefixedInstructions; 
+
+        std::shared_ptr<LDISR> _ldisr;
 };
 
 using InstrDecPtr = std::shared_ptr<InstructionDecoder>;
