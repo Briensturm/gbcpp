@@ -18,8 +18,8 @@ class InstructionDecoder
     private:
         void InstantiateInstructions();
 
-        std::array<InstrPtr, 0xFF> _instructions;
-        std::array<InstrPtr, 0xFF> _prefixedInstructions; 
+        std::array<InstrPtr, 0xFF+1> _instructions;
+        std::array<InstrPtr, 0xFF+1> _prefixedInstructions; 
 
         std::shared_ptr<LDISR> _ldisr;
 };
