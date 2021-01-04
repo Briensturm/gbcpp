@@ -54,6 +54,29 @@ add_library(cpu
     instructions/controlflow/reti.hpp
     instructions/controlflow/rst.hpp
     instructions/internal/ldisr.hpp
+    instructions/load/ld_bc_a.hpp
+    instructions/load/ld_d16_a.hpp
+    instructions/load/ld_d16_sp.hpp
+    instructions/load/ld_de_a.hpp
+    instructions/load/ld_hl_d8.hpp
+    instructions/load/ld_hl_r8.hpp
+    instructions/load/ld_hlm_a.hpp
+    instructions/load/ld_hlp_a.hpp
+    instructions/load/lda_bc_.hpp
+    instructions/load/lda_d16_.hpp
+    instructions/load/lda_de_.hpp
+    instructions/load/lda_hlm_.hpp
+    instructions/load/lda_hlp_.hpp
+    instructions/load/ldh_c_a.hpp
+    instructions/load/ldh_d8_a.hpp
+    instructions/load/ldha_c_.hpp
+    instructions/load/ldha_d8_.hpp
+    instructions/load/ldhlsps8.hpp
+    instructions/load/ldr8_hl_.hpp
+    instructions/load/ldr8d8.hpp
+    instructions/load/ldr8r8.hpp
+    instructions/load/ldr16d16.hpp
+    instructions/load/ldsphl.hpp
     instructions/logic/anda_hl_.hpp
     instructions/logic/andad8.hpp
     instructions/logic/andar8.hpp
