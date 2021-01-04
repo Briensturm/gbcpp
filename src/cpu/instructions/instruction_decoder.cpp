@@ -40,6 +40,29 @@
 #include "controlflow/retcc.hpp"
 #include "controlflow/reti.hpp"
 #include "controlflow/rst.hpp"
+#include "load/ld_bc_a.hpp"
+#include "load/ld_d16_a.hpp"
+#include "load/ld_d16_sp.hpp"
+#include "load/ld_de_a.hpp"
+#include "load/ld_hl_d8.hpp"
+#include "load/ld_hl_r8.hpp"
+#include "load/ld_hlm_a.hpp"
+#include "load/ld_hlp_a.hpp"
+#include "load/lda_bc_.hpp"
+#include "load/lda_d16_.hpp"
+#include "load/lda_de_.hpp"
+#include "load/lda_hlm_.hpp"
+#include "load/lda_hlp_.hpp"
+#include "load/ldh_c_a.hpp"
+#include "load/ldh_d8_a.hpp"
+#include "load/ldha_c_.hpp"
+#include "load/ldha_d8_.hpp"
+#include "load/ldhlsps8.hpp"
+#include "load/ldr8_hl_.hpp"
+#include "load/ldr8d8.hpp"
+#include "load/ldr8r8.hpp"
+#include "load/ldr16d16.hpp"
+#include "load/ldsphl.hpp"
 #include "logic/anda_hl_.hpp"
 #include "logic/andad8.hpp"
 #include "logic/andar8.hpp"
@@ -156,26 +179,62 @@ void InstructionDecoder::InstantiateInstructions()
         else if ((opcode & 0xF8) == 0x90 && opcode != 0x96)
             _instructions[opcode] = std::make_shared<SUBAR8>();
 
+        else if ((opcode & 0xF8) == 0x70 && opcode != 0x76)
+            _instructions[opcode] = std::make_shared<LD_HL_R8>();
+
+        else if ((opcode & 0xC7) == 0x46 && opcode != 0x76)
+            _instructions[opcode] = std::make_shared<LDR8_HL_>();
+
+        else if ((opcode & 0xC7) == 0x06 && opcode != 0x36)
+            _instructions[opcode] = std::make_shared<LDR8D8>();
+
+        else if ((opcode >> 6) == 0x01 && (opcode & 0x07) != 0x06 && (opcode & 0x38) != 0x30)
+            _instructions[opcode] = std::make_shared<LDR8R8>();
+
+        else if ((opcode & 0xCF) == 0x01)
+            _instructions[opcode] = std::make_shared<LDR16D16>();
+
+
         else
         {
             switch(opcode)
             {
                 case 0x00:
                     _instructions[opcode] = std::make_shared<NOP>();
+                case 0x02:
+                    _instructions[opcode] = std::make_shared<LD_BC_A>();
+                case 0x08:
+                    _instructions[opcode] = std::make_shared<LD_D16_SP>();
+                case 0x0A:
+                    _instructions[opcode] = std::make_shared<LDA_BC_>();
                 case 0x10:
                     _instructions[opcode] = std::make_shared<STOP>();
+                case 0x12:
+                    _instructions[opcode] = std::make_shared<LD_DE_A>();
                 case 0x18:
                     _instructions[opcode] = std::make_shared<JR>();
+                case 0x1A:
+                    _instructions[opcode] = std::make_shared<LDA_DE_>();
+                case 0x22:
+                    _instructions[opcode] = std::make_shared<LD_HLP_A>();
                 case 0x27:
                     _instructions[opcode] = std::make_shared<DAA>();
+                case 0x2A:
+                    _instructions[opcode] = std::make_shared<LDA_HLP_>();
                 case 0x2F:
                     _instructions[opcode] = std::make_shared<CPL>();
+                case 0x32:
+                    _instructions[opcode] = std::make_shared<LD_HLM_A>();
                 case 0x34:
                     _instructions[opcode] = std::make_shared<INC_HL_>();
                 case 0x35:
                     _instructions[opcode] = std::make_shared<DEC_HL_>();
+                case 0x36:
+                    _instructions[opcode] = std::make_shared<LD_HL_D8>();
                 case 0x37:
                     _instructions[opcode] = std::make_shared<SCF>();
+                case 0x3A:
+                    _instructions[opcode] = std::make_shared<LDA_HLM_>();
                 case 0x3F:
                     _instructions[opcode] = std::make_shared<CCF>();
                 case 0x76:
@@ -214,18 +273,34 @@ void InstructionDecoder::InstantiateInstructions()
                     _instructions[opcode] = std::make_shared<RETI>();
                 case 0xDE:
                     _instructions[opcode] = std::make_shared<SBCAD8>();
+                case 0xE0:
+                    _instructions[opcode] = std::make_shared<LDH_D8_A>();
+                case 0xE2:
+                    _instructions[opcode] = std::make_shared<LDH_C_A>();
                 case 0xE6:
                     _instructions[opcode] = std::make_shared<ANDAD8>();
                 case 0xE8:
                     _instructions[opcode] = std::make_shared<ADDSPS8>();
                 case 0xE9:
                     _instructions[opcode] = std::make_shared<JPHL>();
+                case 0xEA:
+                    _instructions[opcode] = std::make_shared<LD_D16_A>();
                 case 0xEE:
                     _instructions[opcode] = std::make_shared<XORAD8>();
+                case 0xF0:
+                    _instructions[opcode] = std::make_shared<LDHA_D8_>();
+                case 0xF2:
+                    _instructions[opcode] = std::make_shared<LDHA_C_>();
                 case 0xF3:
                     _instructions[opcode] = std::make_shared<DI>();
                 case 0xF6:
                     _instructions[opcode] = std::make_shared<ORAD8>();
+                case 0xF8:
+                    _instructions[opcode] = std::make_shared<LDHLSPS8>();
+                case 0xF9:
+                    _instructions[opcode] = std::make_shared<LDSPHL>();
+                case 0xFA:
+                    _instructions[opcode] = std::make_shared<LDA_D16_>();
                 case 0xFB:
                     _instructions[opcode] = std::make_shared<EI>();
                 case 0xFE:
