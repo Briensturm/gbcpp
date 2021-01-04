@@ -97,8 +97,27 @@ add_library(cpu
     instructions/misc/prefix.hpp
     instructions/misc/push.hpp
     instructions/misc/scf.hpp
-    instructions/misc/stop.hpp
+    instructions/misc/stop.hpp    
+    instructions/rotateshift/rl_hl_.hpp
+    instructions/rotateshift/rla.hpp
+    instructions/rotateshift/rlc_hl_.hpp
+    instructions/rotateshift/rlca.hpp
+    instructions/rotateshift/rlcr8.hpp
+    instructions/rotateshift/rlr8.hpp
+    instructions/rotateshift/rr_hl_.hpp
+    instructions/rotateshift/rra.hpp
+    instructions/rotateshift/rrc_hl_.hpp
+    instructions/rotateshift/rrca.hpp
+    instructions/rotateshift/rrcr8.hpp
     instructions/rotateshift/rrr8.hpp
+    instructions/rotateshift/sla_hl_.hpp
+    instructions/rotateshift/slar8.hpp
+    instructions/rotateshift/sra_hl_.hpp
+    instructions/rotateshift/srar8.hpp
+    instructions/rotateshift/srl_hl_.hpp
+    instructions/rotateshift/srlr8.hpp
+    instructions/rotateshift/swap_hl_.hpp
+    instructions/rotateshift/swapr8.hpp
 )
 
 target_link_libraries(cpu ram)

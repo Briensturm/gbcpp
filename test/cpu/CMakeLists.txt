@@ -15,3 +15,9 @@ cpucore_tests.cpp
 )
 target_link_libraries(cpucore_tests cpu ram)
 add_test(cpucore_tests cpucore_tests)
+
+add_executable(instrdec_tests 
+    instrdec_tests.cpp
+)
+target_link_libraries(instrdec_tests cpu)
+add_test(instrdec_tests instrdec_tests)
