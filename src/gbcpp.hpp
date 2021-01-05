@@ -12,13 +12,18 @@ namespace constants
 {
     namespace reg
     {
-        ushort const int_enable = 0xFFFF;
-        ushort const int_flags = 0xFF0F;
+        const ushort int_enable = 0xFFFF;
+        const ushort int_flags  = 0xFF0F;
 
-        ushort const serial_data = 0xFF01;
-        ushort const serial_control = 0xFF02;
+        const ushort serial_data    = 0xFF01;
+        const ushort serial_control = 0xFF02;
 
-        ushort const joypad = 0xFF00;
+        const ushort joypad = 0xFF00;
+
+        const ushort divider       = 0xFF04;
+        const ushort timer         = 0xFF05;
+        const ushort timer_load    = 0xFF06;
+        const ushort timer_control = 0xFF07;
     }
 
     namespace int_addr
