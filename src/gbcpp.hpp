@@ -34,4 +34,15 @@ namespace constants
         const ushort serial = 0x0058;
         const ushort joypad = 0x0060;
     }
+
+    namespace cart
+    {
+        const ushort fbank_addrend = 0x3FFF;
+        const ushort rom_addrend   = 0x7FFF;
+        const ushort cram_addrbeg  = 0xA000;
+        const ushort cram_addrend  = 0xBFFF;
+
+        const ushort rombank_size = 0x4000;
+        const ushort rambank_size = 0x2000;
+    }
 }
