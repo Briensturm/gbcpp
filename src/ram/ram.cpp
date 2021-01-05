@@ -2,6 +2,12 @@
 
 using namespace constants;
 
+RandomAccessMemory::RandomAccessMemory()
+{
+    for(int i = 0; i<=0xFFFF; i++)
+        _undelegatedMemory[i] = 0xFF;
+}
+
 byte RandomAccessMemory::ReadByte(ushort address)
 {
     switch (address)
@@ -14,13 +20,17 @@ byte RandomAccessMemory::ReadByte(ushort address)
 
         //DMG/GBC distinction
         case 0xFF4D:
-            return _key1;
+            return _key1;        
+    }          
 
-        //insert cases for different components
+    //check for a delegate
+    auto delegate = _ramDelegates[address];
+    if(delegate)
+    {
+        return delegate->ReadByte(address);
+    }
 
-    }            
-    
-    return 0xFF;
+    return _undelegatedMemory[address];
 }
         
 void RandomAccessMemory::WriteByte(ushort address, byte data)
@@ -36,8 +46,24 @@ void RandomAccessMemory::WriteByte(ushort address, byte data)
             break;
 
         case 0xFF4D:
-            break;
-
-        //insert cases for different components
+            break;        
     }   
+
+    //check for a delegate
+    auto delegate = _ramDelegates[address];
+    if(delegate)
+    {
+        delegate->WriteByte(address, data);
+        return;
+    }
+
+    _undelegatedMemory[address] = data;
+}
+
+void RandomAccessMemory::RegisterDelegate(RamDelegatePtr delegate)
+{
+    auto addresses = delegate->GetDelegatedAddresses();
+
+    for(ushort address : addresses) 
+        _ramDelegates[address] = delegate;
 }
