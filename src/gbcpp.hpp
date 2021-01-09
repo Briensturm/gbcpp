@@ -24,6 +24,22 @@ namespace constants
         const ushort timer         = 0xFF05;
         const ushort timer_load    = 0xFF06;
         const ushort timer_control = 0xFF07;
+
+        const ushort lcd_control = 0xFF40;
+        const ushort lcd_status  = 0xFF41;
+
+        const ushort scroll_y      = 0xFF42;
+        const ushort scroll_x      = 0xFF43;
+        const ushort line_y        = 0xFF44;
+        const ushort liney_compare = 0xFF45;
+        const ushort window_y      = 0xFF4A;
+        const ushort window_x      = 0xFF4B;
+
+        const ushort dma_transfer = 0xFF46;
+
+        const ushort bg_palette  = 0xFF47;
+        const ushort obj_palette0 = 0xFF48;
+        const ushort obj_palette1 = 0xFF49;  
     }
 
     namespace int_addr
@@ -44,5 +60,27 @@ namespace constants
 
         const ushort rombank_size = 0x4000;
         const ushort rambank_size = 0x2000;
+    }
+
+    namespace vid
+    {
+        const int screen_w = 160;
+        const int screen_h = 144;
+
+        const int line_count = 154;
+        const int dots_line = 456;
+
+        const int hblank_mode = 0;
+        const int vblank_mode = 1;
+        const int oamscan_mode = 2;
+        const int pixelwriting_mode = 3;
+
+        enum class shades
+        {
+            white = 0x00,
+            lgrey = 0x01,
+            mgrey = 0x10,
+            black = 0x11,
+        };
     }
 }
